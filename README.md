@@ -35,7 +35,6 @@ This is a Flask application for reviewing and tagging documents based on a YAML 
 ### Technology Stack
 
 - Flask
-- Ninja Tailwind
-- Sailboat UI
+- Flask TailwindCSS
 - PyYAML
 # cuddly-sniffle
