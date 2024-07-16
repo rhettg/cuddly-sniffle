@@ -8,7 +8,12 @@
 <body>
     <h1>Review Document</h1>
     <form method="post">
-        <!-- Form fields for document review -->
+        <p>{{ document['content'] }}</p>
+        <p>{{ question }}</p>
+        {% for tag in tags %}
+            <input type="radio" id="{{ tag }}" name="tag" value="{{ tag }}">
+            <label for="{{ tag }}">{{ tag }}</label><br>
+        {% endfor %}
         <button type="submit">Submit</button>
     </form>
 </body>
