@@ -3,13 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>Review Document</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
 </head>
 <body>
-    <h1>Review Document</h1>
-    <form method="post">
-        <!-- Form fields for document review -->
-        <button type="submit">Submit</button>
-    </form>
+    <header>
+        <h1>Review Document</h1>
+    </header>
+    <main>
+        <form method="post">
+            <h2>Document</h2>
+            <p>{{ document['content'] }}</p>
+            <h2>Question</h2>
+            <p>{{ question }}</p>
+            <h2>Tags</h2>
+            {% for tag in tags %}
+                <input type="radio" id="{{ tag }}" name="tag" value="{{ tag }}">
+                <label for="{{ tag }}">{{ tag }}</label><br>
+            {% endfor %}
+            <button type="submit">Submit</button>
+        </form>
+    </main>
+    <footer>
+        <p>Document Review Application</p>
+    </footer>
 </body>
+</html>
 </html>
