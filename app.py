@@ -5,11 +5,17 @@ import os
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'default_secret_key')
 
-with open('data.yaml', 'r') as file:
-    data = yaml.safe_load(file)
-documents = data['documents']
-questions = data['questions']
-tags = data['tags']
+# Add error handling for missing data.yaml file
+try:
+    with open('data.yaml', 'r') as file:
+        data = yaml.safe_load(file)
+    documents = data['documents']
+    questions = data['questions']
+    tags = data['tags']
+except FileNotFoundError:
+    documents = []
+    questions = []
+    tags = []
 
 @app.before_request
 def initialize_session():
@@ -24,8 +30,8 @@ def index():
 def review():
     if request.method == 'POST':
         selected_tag = request.form['tag']
-        document_id = documents[current_index]['id']
-        question = questions[current_index % len(questions)]
+        document_id = documents[session['current_index']]['id']
+        question = questions[session['current_index'] % len(questions)]
         result = {
             'document_id': document_id,
             'question': question,
