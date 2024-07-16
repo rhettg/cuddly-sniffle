@@ -5,17 +5,37 @@ import os
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "default_secret_key")
 
-# Add error handling for missing data.yaml file
-try:
-    with open("data.yaml", "r") as file:
-        data = yaml.safe_load(file)
-    documents = data["documents"]
-    questions = data["questions"]
-    tags = data["tags"]
-except FileNotFoundError:
-    documents = []
-    questions = []
-    tags = []
+
+def load_data():
+    try:
+        with open("data.yaml", "r") as file:
+            data = yaml.safe_load(file)
+        return {
+            "documents": data.get("documents", []),
+            "questions": data.get("questions", []),
+            "tags": data.get("tags", []),
+        }
+    except FileNotFoundError:
+        return {"documents": [], "questions": [], "tags": []}
+
+
+def save_result(result):
+    try:
+        with open("results.yaml", "r") as file:
+            existing_results = yaml.safe_load(file) or []
+    except FileNotFoundError:
+        existing_results = []
+
+    existing_results.append(result)
+
+    with open("results.yaml", "w") as file:
+        yaml.dump(existing_results, file)
+
+
+data = load_data()
+documents = data["documents"]
+questions = data["questions"]
+tags = data["tags"]
 
 
 @app.before_request
@@ -40,11 +60,7 @@ def review():
         document_id = documents[session["current_index"] // len(questions)]["id"]
         question = questions[session["current_index"] % len(questions)]
         result = {"document_id": document_id, "question": question, "tag": selected_tag}
-        with open("results.yaml", "r") as file:
-            existing_results = yaml.safe_load(file) or []
-        existing_results.append(result)
-        with open("results.yaml", "w") as file:
-            yaml.dump(existing_results, file)
+        save_result(result)
         session["current_index"] += 1
         return redirect(url_for("review"))
 
