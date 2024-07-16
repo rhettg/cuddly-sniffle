@@ -4,6 +4,18 @@
     <meta charset="UTF-8">
     <title>Review Document</title>
     <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+    <script>
+        function handleKeyPress(event) {
+            if (event.key >= '1' && event.key <= '3') {
+                const radio = document.getElementById('tag' + event.key);
+                if (radio) {
+                    radio.checked = true;
+                    document.querySelector('form').submit();
+                }
+            }
+        }
+        document.addEventListener('keydown', handleKeyPress);
+    </script>
 </head>
 <body>
     <header>
@@ -16,10 +28,12 @@
             <h2>Question</h2>
             <p>{{ question }}</p>
             <h2>Tags</h2>
-            {% for tag in tags %}
-                <input type="radio" id="{{ tag }}" name="tag" value="{{ tag }}">
-                <label for="{{ tag }}">{{ tag }}</label><br>
-            {% endfor %}
+            <input type="radio" id="tag1" name="tag" value="high">
+            <label for="tag1">High (1)</label><br>
+            <input type="radio" id="tag2" name="tag" value="medium">
+            <label for="tag2">Medium (2)</label><br>
+            <input type="radio" id="tag3" name="tag" value="not_relevant">
+            <label for="tag3">Not Relevant (3)</label><br>
             <button type="submit">Submit</button>
         </form>
     </main>
@@ -27,5 +41,4 @@
         <p>Document Review Application</p>
     </footer>
 </body>
-</html>
 </html>
